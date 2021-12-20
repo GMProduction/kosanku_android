@@ -12,6 +12,7 @@ import 'component/request.dart';
 
 class Login extends StatefulWidget {
   String roles;
+
   Login({this.roles});
 
   @override
@@ -24,13 +25,14 @@ class _LoginState extends State<Login> {
   var roles;
 
 
-
   var email, password;
 
   @override
   Widget build(BuildContext context) {
-
-    final Login args = ModalRoute.of(context).settings.arguments;
+    final Login args = ModalRoute
+        .of(context)
+        .settings
+        .arguments;
     roles = args.roles;
 
     return Scaffold(
@@ -126,17 +128,20 @@ class _LoginState extends State<Login> {
               ),
               readyToHit
                   ? GenButton(
-                      text: "SIGN IN",
-                      ontap: () {
-                        login(email, password);
-                      },
-                    )
+                text: "SIGN IN",
+                ontap: () {
+                  login(email, password);
+                },
+              )
                   : CircularProgressIndicator(),
 
               SizedBox(height: 10,),
-              InkWell(onTap: (){
-                Navigator.pushNamed(context, "daftar", arguments:  Daftar(roles: roles,));
-              },child: GenText("Belum punya akun ? Daftar disini", style: TextStyle(fontSize: 16),))
+              InkWell(onTap: () {
+                Navigator.pushNamed(
+                    context, "daftar", arguments: Daftar(roles: roles,));
+              },
+                  child: GenText("Belum punya akun ? Daftar disini",
+                    style: TextStyle(fontSize: 16),))
             ],
           ),
         ),
@@ -149,7 +154,7 @@ class _LoginState extends State<Login> {
       readyToHit = false;
     });
     dynamic data;
-    data = await req.postApi("login", {"username": username, "password":pass});
+    data = await req.postApi("login", {"username": username, "password": pass});
 
     print("DATA $data");
     setState(() {
@@ -158,11 +163,22 @@ class _LoginState extends State<Login> {
     if (data["status"] == 200) {
       setState(() {
         setPrefferenceToken(data["data"]["token"]);
-        Navigator.pushReplacementNamed(context, "propertymu");
-      });
+        if (data["data"]["roles"] == "user"){
+        Navigator.pushReplacementNamed(context, "base");
+
+        }else{
+        Navigator.pushReplacementNamed(context, "baseagen");
+
+        }
+        });
     } else if (data["code"] == 202) {
       setState(() {
-          toastShow(data["payload"]["msg"], context, GenColor.red);
+        toastShow(data["payload"]["msg"], context, GenColor.red);
+      });
+    }
+    else if (data["msg"] != null) {
+      setState(() {
+        toastShow(data["msg"], context, GenColor.red);
       });
     } else {
       setState(() {

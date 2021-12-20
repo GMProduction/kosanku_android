@@ -188,7 +188,6 @@ class GenRequest {
 
   postApi(portal, Map<dynamic, dynamic> data) async {
     try {
-      var token = await getPrefferenceToken();
       print("data" +data.toString());
 
       print("ipnya "+ip + "/api/" + portal);

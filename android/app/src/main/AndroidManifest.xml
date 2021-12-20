@@ -1,11 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.genossys.kosanku">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
    <application
         android:label="kosanku"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
+
+       <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyBRnINQ-NW9LNW_qiXP5T2xtG37fv28Vyo"/>
+<!--       AIzaSyBRnINQ-NW9LNW_qiXP5T2xtG37fv28Vyo-->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

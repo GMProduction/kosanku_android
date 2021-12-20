@@ -47,7 +47,7 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
   var bloc, dataProperty;
   var clientId;
   var stateHari;
-  var kelas, dariValue, keValue, totalpenumpang;
+  var dariValue, keValue, totalpenumpang;
   dynamic dataUser;
 
   @override

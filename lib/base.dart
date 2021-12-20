@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kosanku/profil.dart';
-import 'package:kosanku/transaksi.dart';
+import 'package:kosanku/maps.dart';
 
 
 import 'package:toast/toast.dart';
@@ -31,7 +31,7 @@ class _BaseState extends State<Base> {
 
   final _widgetOptions = [
     Beranda(),
-    Transaksi(),
+    Maps(),
     Profil(),
   ];
 
