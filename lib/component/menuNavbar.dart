@@ -9,7 +9,7 @@ class MenuNavbar {
 }
 
 const List<MenuNavbar> allDestinations = <MenuNavbar>[
-  MenuNavbar('Pesan Tiket', Icons.home_outlined),
+  MenuNavbar('Kos', Icons.home_outlined),
   MenuNavbar('Maps', Icons.map_sharp),
   MenuNavbar('Profil', Icons.account_box_outlined),
 ];

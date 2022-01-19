@@ -116,11 +116,11 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To My Position!'),
-        icon: Icon(Icons.account_circle),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _goToTheLake,
+      //   label: Text('To My Position!'),
+      //   icon: Icon(Icons.account_circle),
+      // ),
     );
   }
 
@@ -212,7 +212,7 @@ class _MapsState extends State<Maps> with WidgetsBindingObserver {
   void _add(markerIdVal, nama, keterangan, lat, lng) async {
     final MarkerId markerId = MarkerId(markerIdVal);
     var marker;
-    print("lat "+currentPosition.latitude.toString());
+    // print("lat "+currentPosition.latitude.toString());
     // creating a new MARKER
     final Uint8List markerIcon = await getBytesFromAsset('asset/logo.png', 100);
 

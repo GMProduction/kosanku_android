@@ -9,6 +9,6 @@ class MenuNavbarAgen {
 }
 
 const List<MenuNavbarAgen> allDestinations = <MenuNavbarAgen>[
-  MenuNavbarAgen('Property', Icons.home_outlined),
+  MenuNavbarAgen('Kos', Icons.home_outlined),
   MenuNavbarAgen('Profil', Icons.account_box_outlined),
 ];

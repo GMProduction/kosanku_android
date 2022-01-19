@@ -128,7 +128,7 @@ class _BerandaAgenState extends State<BerandaAgen> with WidgetsBindingObserver {
             ),
             CommonPadding(
                 child: GenText(
-              "Property mu",
+              "Kos ku",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             )),
             SizedBox(
