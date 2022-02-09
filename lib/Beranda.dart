@@ -49,13 +49,14 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
   var stateHari;
   var dariValue, keValue, totalpenumpang;
   dynamic dataUser;
+  var search_nama = "";
 
   @override
   void initState() {
     // TODO: implement initState
     // analytics.
     getUser();
-    getProperty();
+    getProperty(search_nama);
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -80,14 +81,8 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
 
     ScreenUtil.init(
         BoxConstraints(
-            maxWidth: MediaQuery
-                .of(context)
-                .size
-                .width,
-            maxHeight: MediaQuery
-                .of(context)
-                .size
-                .height),
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
         designSize: Size(360, 690),
         orientation: Orientation.portrait);
     bloc = Provider.of<BaseBloc>(context);
@@ -165,6 +160,15 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
                     prefixIcon: Icon(Icons.search),
                     label: "",
                     hintText: "Cari kos disini",
+                    onChanged: (value) {
+                      search_nama = value;
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        setState(() {
+                          // Here you can write your code for open new view
+                          getProperty(search_nama);
+                        });
+                      });
+                    },
                   )
                 ],
               ),
@@ -180,10 +184,10 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
                     ),
                     CommonPadding(
                         child: GenText(
-                          "Rekomendasi Kos",
-                          style:
+                      "Rekomendasi Kos",
+                      style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        )),
+                    )),
                     SizedBox(
                       height: 20,
                     ),
@@ -192,239 +196,263 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
                       child: dataProperty == null
                           ? Container()
                           : dataProperty.length == 0
-                          ? Center(
-                        child: GenText("Tidak ada mobil tersedia"),
-                      )
-                          : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: dataProperty.map<Widget>((e) {
-                              return CommonPadding(
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.pushNamed(context, "detailKos", arguments: DetailKos(id: e["id"],));
-                                  },
-                                  child: Container(
-                                    height: 150,
-                                    child: Column(
+                              ? Center(
+                                  child: GenText("Tidak ada mobil tersedia"),
+                                )
+                              : SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Image.network(
-                                          ip + e["foto"],
-                                          height: 75,
-                                          width: 200,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          child: Column(
+                                          CrossAxisAlignment.start,
+                                      children: dataProperty.map<Widget>((e) {
+                                        return CommonPadding(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context, "detailKos",
+                                                  arguments: DetailKos(
+                                                    id: e["id"],
+                                                  ));
+                                            },
+                                            child: Container(
+                                              height: 150,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Image.network(
+                                                    ip + e["foto"],
+                                                    height: 75,
+                                                    width: 200,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                  Container(
+                                                    padding: EdgeInsets.all(5),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            GenText(
+                                                              e["nama"],
+                                                              style: TextStyle(
+                                                                  fontSize: 12),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            GenText(
+                                                              ". " +
+                                                                  e['peruntukan'] +
+                                                                  " .",
+                                                              style: TextStyle(
+                                                                  fontSize: 12),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            // Icon(
+                                                            //   Icons.star,
+                                                            //   size: 12,
+                                                            // ),
+                                                            // GenText(
+                                                            //   "4.1",
+                                                            //   style: TextStyle(
+                                                            //       fontSize: 12),
+                                                            // ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        // Row(
+                                                        //   mainAxisAlignment:
+                                                        //   MainAxisAlignment
+                                                        //       .start,
+                                                        //   children: [
+                                                        //     Icon(
+                                                        //       Icons.location_pin,
+                                                        //       size: 11,
+                                                        //     ),
+                                                        //     SizedBox(
+                                                        //       width: 5,
+                                                        //     ),
+                                                        //     GenText(
+                                                        //       e["alamat"],
+                                                        //       style: TextStyle(
+                                                        //           fontSize: 12),
+                                                        //     ),
+                                                        //   ],
+                                                        // ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        GenText(
+                                                          formatRupiah(
+                                                              e["harga"]
+                                                                  .toString()),
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList()),
+                                ),
+                    ),
+                    dataProperty == null
+                        ? Container()
+                        : dataProperty.length == 0
+                            ? Center(
+                                child: GenText("Tidak ada mobil tersedia"),
+                              )
+                            : Column(
+                                children: dataProperty.map<Widget>((e) {
+                                return CommonPadding(
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(context, "detailKos",
+                                          arguments: DetailKos(
+                                            id: e["id"],
+                                          ));
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(bottom: 20),
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          boxShadow: GenShadow().genShadow(
+                                              radius: 3.w,
+                                              offset: Offset(0, 2.w))),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Image.network(
+                                            ip + e["foto"],
+                                            height: 120,
+                                            width: 120,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               SizedBox(
                                                 height: 5,
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .start,
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   GenText(
                                                     e["nama"],
                                                     style: TextStyle(
-                                                        fontSize: 12),
+                                                        fontSize: GenDimen
+                                                            .fontSizeBawah),
                                                   ),
                                                   SizedBox(
                                                     width: 10,
                                                   ),
                                                   GenText(
-                                                    ". "+e['peruntukan']+" .",
+                                                    ". " +
+                                                        e["peruntukan"] +
+                                                        " .",
                                                     style: TextStyle(
-                                                        fontSize: 12),
+                                                        fontSize: GenDimen
+                                                            .fontSizeBawah),
                                                   ),
                                                   SizedBox(
                                                     width: 10,
                                                   ),
-                                                  // Icon(
-                                                  //   Icons.star,
-                                                  //   size: 12,
-                                                  // ),
-                                                  // GenText(
-                                                  //   "4.1",
-                                                  //   style: TextStyle(
-                                                  //       fontSize: 12),
-                                                  // ),
+                                                  Icon(
+                                                    Icons.star,
+                                                    size:
+                                                        GenDimen.fontSizeBawah,
+                                                  ),
                                                 ],
                                               ),
                                               SizedBox(
                                                 height: 5,
                                               ),
-                                              // Row(
-                                              //   mainAxisAlignment:
-                                              //   MainAxisAlignment
-                                              //       .start,
-                                              //   children: [
-                                              //     Icon(
-                                              //       Icons.location_pin,
-                                              //       size: 11,
-                                              //     ),
-                                              //     SizedBox(
-                                              //       width: 5,
-                                              //     ),
-                                              //     GenText(
-                                              //       e["alamat"],
-                                              //       style: TextStyle(
-                                              //           fontSize: 12),
-                                              //     ),
-                                              //   ],
-                                              // ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.location_pin,
+                                                    size:
+                                                        GenDimen.fontSizeBawah,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  GenText(
+                                                    e["alamat"],
+                                                    style: TextStyle(
+                                                        fontSize: GenDimen
+                                                            .fontSizeBawah),
+                                                  ),
+                                                ],
+                                              ),
                                               SizedBox(
                                                 height: 5,
                                               ),
                                               GenText(
-                                                formatRupiah(e["harga"].toString()),
+                                                formatRupiah(
+                                                    e["harga"].toString()),
                                                 style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize:
+                                                        GenDimen.fontSizeBawah,
                                                     fontWeight:
-                                                    FontWeight
-                                                        .bold),
+                                                        FontWeight.bold),
                                               ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 100,
+                                                    child: GenButton(
+                                                      text: "Pesan Kos",
+                                                      padding:
+                                                          EdgeInsets.all(3),
+                                                      radius: 10,
+                                                      textSize: 16,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-
-                            }).toList()
-                        ),
-                      ),
-                    ),
-                    dataProperty == null
-                        ? Container()
-                        : dataProperty.length == 0
-                        ? Center(
-                      child: GenText("Tidak ada mobil tersedia"),
-                    )
-                        : Column(children: dataProperty.map<Widget>((e) {
-                      return CommonPadding(
-                        child: InkWell(
-                          onTap: (){
-                            Navigator.pushNamed(context, "detailKos", arguments: DetailKos(id: e["id"],));
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.only(bottom: 20),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: GenShadow().genShadow(
-                                    radius: 3.w, offset: Offset(0, 2.w))),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.network(
-                                 ip + e["foto"],
-                                  height: 120,
-                                  width: 120,
-                                  fit: BoxFit.cover,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        GenText(
-                                         e["nama"],
-                                          style: TextStyle(
-                                              fontSize: GenDimen.fontSizeBawah),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        GenText(
-                                          ". "+e["peruntukan"]+" .",
-                                          style: TextStyle(
-                                              fontSize: GenDimen.fontSizeBawah),
-                                        ),
-                                        SizedBox(
-                                          width: 10,
-                                        ),
-                                        Icon(
-                                          Icons.star,
-                                          size: GenDimen.fontSizeBawah,
-                                        ),
-
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                      children: [
-                                        Icon(
-                                          Icons.location_pin,
-                                          size: GenDimen.fontSizeBawah,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        GenText(
-                                          e["alamat"],
-                                          style: TextStyle(
-                                              fontSize: GenDimen.fontSizeBawah),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    GenText(
-                                      formatRupiah(e["harga"].toString()),
-                                      style: TextStyle(
-                                          fontSize: GenDimen.fontSizeBawah,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 100,
-                                          child: GenButton(
-                                            text: "Pesan Kos",
-                                            padding: EdgeInsets.all(3),
-                                            radius: 10,
-                                            textSize: 16,
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList()),
+                                );
+                              }).toList()),
                   ],
                 ),
               ),
@@ -443,8 +471,12 @@ class _BerandaState extends State<Beranda> with WidgetsBindingObserver {
     setState(() {});
   }
 
-  void getProperty() async {
-    dataProperty = await req.getApi("user/kos");
+  void getProperty(nama) async {
+    if (search_nama == "") {
+      dataProperty = await req.getApi("user/kos");
+    } else {
+      dataProperty = await req.getApi("user/kos/search/$nama");
+    }
 
     print("DATA $dataProperty");
     print("length" + dataProperty.length.toString());

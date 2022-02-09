@@ -209,7 +209,10 @@ class _BerandaAgenState extends State<BerandaAgen> with WidgetsBindingObserver {
                                               textSize: 16,
                                               ontap: () {
                                                 Navigator.pushNamed(
-                                                    context, "inputkos", arguments: InputKos(id: e["id"],));
+                                                    context, "editkos", arguments: InputKos(id: e["id"],
+
+
+                                                ));
                                               },
                                             )
                                           ],

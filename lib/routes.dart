@@ -1,4 +1,5 @@
 
+import 'package:kosanku/editKos.dart';
 import 'package:kosanku/inputKos.dart';
 import 'package:kosanku/pembangunan.dart';
 import 'package:kosanku/pembayaran.dart';
@@ -101,6 +102,11 @@ class GenProvider {
       'inputkos': (context) {
         // return Login();
         return InputKos();
+      },
+
+      'editkos': (context) {
+        // return Login();
+        return EditKos();
       },
 
     };
