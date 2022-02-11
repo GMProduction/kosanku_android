@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kosanku/component/JustHelper.dart';
+import 'package:kosanku/editKos.dart';
 import 'package:kosanku/inputKos.dart';
 import 'package:provider/provider.dart';
 
@@ -209,7 +210,10 @@ class _BerandaAgenState extends State<BerandaAgen> with WidgetsBindingObserver {
                                               textSize: 16,
                                               ontap: () {
                                                 Navigator.pushNamed(
-                                                    context, "editkos", arguments: InputKos(id: e["id"],
+                                                    context, "editkos", arguments: EditKos(id: e["id"],
+                                                  nama: e["nama"], keterangan: e["keterangan"], foto: e["foto"],
+                                                  peruntukan: e["peruntukan"], harga: e["harga"], alamat: e["alamat"],
+                                                    latitude: e["latitude"], longtitude:  e["longtitude"],
 
 
                                                 ));

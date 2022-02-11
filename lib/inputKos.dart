@@ -21,7 +21,7 @@ class _InputKosState extends State<InputKos> {
   bool readyToHit = true;
   final req = new GenRequest();
 
-  var nama, keterangan, peruntukan, no_hp, harga, alamat;
+  var nama, keterangan, peruntukan, no_hp, harga, alamat, latitude, longitude;
   var id;
   XFile _image;
 
@@ -172,6 +172,47 @@ class _InputKosState extends State<InputKos> {
                   }
                 },
               ),
+              SizedBox(
+                height: 20,
+              ),
+              TextLoginField(
+                initVal: latitude,
+                width: double.infinity,
+                label: "Latitude",
+                keyboardType: TextInputType.text,
+//                                    controller: tecNumber,
+                onChanged: (val) {
+                  latitude = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return "Isi Latitude Dengan Benar";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+
+              SizedBox(
+                height: 20,
+              ),
+              TextLoginField(
+                initVal: longitude,
+                width: double.infinity,
+                label: "Longtitude",
+                keyboardType: TextInputType.text,
+//                                    controller: tecNumber,
+                onChanged: (val) {
+                  longitude = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return "Isi Longitude Dengan Benar";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
               _image == null
                   ? Container(
                       width: 100,
@@ -205,10 +246,10 @@ class _InputKosState extends State<InputKos> {
                         // Navigator.pushNamed(context, "base");
                         if(id != 0){
                           tambah(nama, alamat, keterangan, peruntukan, harga,
-                              _image);
+                              _image, latitude, longitude);
                         }else{
                           edit(nama, alamat, keterangan, peruntukan, harga,
-                              _image);
+                              _image, latitude, longitude);
                         }
 
                       },
@@ -224,7 +265,7 @@ class _InputKosState extends State<InputKos> {
     );
   }
 
-  void tambah(nama, alamat, keterangan, peruntukan, harga, foto) async {
+  void tambah(nama, alamat, keterangan, peruntukan, harga, foto, latitude, longitude) async {
     setState(() {
       readyToHit = false;
     });
@@ -236,6 +277,8 @@ class _InputKosState extends State<InputKos> {
       "keterangan": keterangan,
       "peruntukan": peruntukan,
       "harga": harga,
+      "latitude": latitude,
+      "longtitude": longitude,
       "foto": await MultipartFile.fromFile(foto.path, filename: fileName)
     });
 
@@ -258,7 +301,7 @@ class _InputKosState extends State<InputKos> {
     }
   }
 
-  void edit(nama, alamat, keterangan, peruntukan, harga, foto) async {
+  void edit(nama, alamat, keterangan, peruntukan, harga, foto, latitude, longitude) async {
     setState(() {
       readyToHit = false;
     });
@@ -271,6 +314,8 @@ class _InputKosState extends State<InputKos> {
       "peruntukan": peruntukan,
       "harga": harga,
       "id": id,
+      "latitude": latitude,
+      "longtitude": longitude,
       "foto": await MultipartFile.fromFile(foto.path, filename: fileName)
     });
 

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:js_util';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +10,8 @@ import 'component/genToast.dart';
 import 'component/request.dart';
 
 class EditKos extends StatefulWidget {
-  var id;
-  EditKos({this.id});
+  var id, nama, keterangan, peruntukan, no_hp, harga, alamat, foto, latitude, longtitude;
+  EditKos({this.id, this.nama, this.keterangan, this.peruntukan, this.no_hp, this.harga, this.alamat, this.foto, this.latitude, this.longtitude});
 
   @override
   _EditKosState createState() => _EditKosState();
@@ -21,8 +20,8 @@ class EditKos extends StatefulWidget {
 class _EditKosState extends State<EditKos> {
   bool readyToHit = true;
   final req = new GenRequest();
-
-  var nama, keterangan, peruntukan, no_hp, harga, alamat;
+  var isLoaded = false;
+  var nama, keterangan, peruntukan, no_hp, harga, alamat, dataProperty, foto, latitude, longtitude;
   var id;
   XFile _image;
 
@@ -52,7 +51,20 @@ class _EditKosState extends State<EditKos> {
     final EditKos args = ModalRoute.of(context).settings.arguments;
     id = args.id;
 
-    getProperty(o, name)
+    if(!isLoaded){
+      nama = args.nama;
+      keterangan = args.keterangan;
+      peruntukan = args.peruntukan;
+      no_hp = args.no_hp;
+      harga = args.harga.toString();
+      alamat = args.alamat;
+      foto = args.foto;
+      latitude = args.latitude;
+      longtitude = args.longtitude;
+      isLoaded = true;
+    }
+
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(30),
@@ -174,6 +186,47 @@ class _EditKosState extends State<EditKos> {
                   }
                 },
               ),
+              SizedBox(
+                height: 20,
+              ),
+              TextLoginField(
+                initVal: latitude,
+                width: double.infinity,
+                label: "Latitude",
+                keyboardType: TextInputType.text,
+//                                    controller: tecNumber,
+                onChanged: (val) {
+                  latitude = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return "Isi Latitude Dengan Benar";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+
+              SizedBox(
+                height: 20,
+              ),
+              TextLoginField(
+                initVal: longtitude,
+                width: double.infinity,
+                label: "Longtitude",
+                keyboardType: TextInputType.text,
+//                                    controller: tecNumber,
+                onChanged: (val) {
+                  longtitude = val;
+                },
+                validator: (val) {
+                  if (val.length < 1) {
+                    return "Isi Longitude Dengan Benar";
+                  } else {
+                    return null;
+                  }
+                },
+              ),
               _image == null
                   ? Container(
                       width: 100,
@@ -201,13 +254,13 @@ class _EditKosState extends State<EditKos> {
               ),
               readyToHit
                   ? GenButton(
-                      text: "TAMBAH",
+                      text: "Edit",
                       ontap: () {
                         // login(email, password);
                         // Navigator.pushNamed(context, "base");
                         if(id != 0){
-                          tambah(nama, alamat, keterangan, peruntukan, harga,
-                              _image);
+                          tambah(id, nama, alamat, keterangan, peruntukan, harga,
+                              _image, latitude, longtitude);
                         }else{
                           edit(nama, alamat, keterangan, peruntukan, harga,
                               _image);
@@ -226,18 +279,21 @@ class _EditKosState extends State<EditKos> {
     );
   }
 
-  void tambah(nama, alamat, keterangan, peruntukan, harga, foto) async {
+  void tambah(id, nama, alamat, keterangan, peruntukan, harga, foto, latitude, longtitude) async {
     setState(() {
       readyToHit = false;
     });
     String fileName = foto.path.split('/').last;
     dynamic data;
     data = await req.postForm("mitra/kos", {
+      "id": id,
       "nama": nama,
       "alamat": alamat,
       "keterangan": keterangan,
       "peruntukan": peruntukan,
       "harga": harga,
+      "latitude": latitude,
+      "longtitude": longtitude,
       "foto": await MultipartFile.fromFile(foto.path, filename: fileName)
     });
 
@@ -273,6 +329,8 @@ class _EditKosState extends State<EditKos> {
       "peruntukan": peruntukan,
       "harga": harga,
       "id": id,
+      "latitude": latitude,
+      "longtitude": longtitude,
       "foto": await MultipartFile.fromFile(foto.path, filename: fileName)
     });
 
@@ -295,12 +353,5 @@ class _EditKosState extends State<EditKos> {
     }
   }
 
-  // void getProperty(id) async {
-  //   dataProperty = await req.getApi("user/kos/" + id.toString());
-  //
-  //   print("DATA $dataProperty");
-  //   print("length" + id.toString());
-  //
-  //   setState(() {});
-  // }
+
 }
